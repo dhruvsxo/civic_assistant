@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import os
 
@@ -264,7 +264,7 @@ async def update_complaint(complaint_id: str, update: dict):
     if not complaint:
         raise HTTPException(status_code=404, detail="Complaint not found")
 
-    updated_at = datetime.now(datetime.UTC).isoformat()
+    updated_at = datetime.now(timezone.utc).isoformat()
     db_fields = {"updated_at": updated_at}
 
     if "status" in update:
@@ -294,7 +294,7 @@ async def escalate(req: EscalateRequest):
     if not complaint:
         raise HTTPException(status_code=404, detail="Complaint not found")
 
-    updated_at = datetime.now(datetime.UTC).isoformat()
+    updated_at = datetime.now(timezone.utc).isoformat()
     complaint.status = ComplaintStatus.ESCALATED
     complaint.priority = Priority.CRITICAL
     complaint.resolution_notes = f"Escalated by {req.officer_id}: {req.reason}"
