@@ -5,7 +5,7 @@ Models — Pydantic schemas for complaints, status, priority, and dashboard.
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 
@@ -47,8 +47,8 @@ class Complaint(BaseModel):
     status: ComplaintStatus = ComplaintStatus.OPEN
     location: Optional[Dict[str, Any]] = None
     zone: Optional[str] = None
-    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
-    updated_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     resolved_at: Optional[str] = None
     resolution_notes: Optional[str] = None
     estimated_resolution: Optional[str] = None
